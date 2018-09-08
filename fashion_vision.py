@@ -87,10 +87,24 @@ def plot_value_array(i, predictions_array, true_label):
   thisplot[predicted_label].set_color('red')
   thisplot[true_label].set_color('blue')
 
-i = 0
-plt.figure(figsize=(6,3))
-plt.subplot(1,2,1)
-plot_image(i, predictions, test_labels, test_images)
-plt.subplot(1,2,2)
-plot_value_array(i, predictions,  test_labels)
+# plot out images alongside prediction graphs
+# num_rows = 5
+# num_cols = 3
+# num_images = num_rows*num_cols
+# plt.figure(figsize=(2*2*num_cols, 2*num_rows))
+# for i in range(num_images):
+#   plt.subplot(num_rows, 2*num_cols, 2*i+1)
+#   plot_image(i, predictions, test_labels, test_images)
+#   plt.subplot(num_rows, 2*num_cols, 2*i+2)
+#   plot_value_array(i, predictions, test_labels)
+# plt.show()
+
+# prediction for a single image
+img = test_images[0]
+img = (np.expand_dims(img,0))
+predictions_single = model.predict(img)
+print(predictions_single)
+plot_value_array(0, predictions_single, test_labels)
+_ = plt.xticks(range(10), class_names, rotation=45)
+print(np.argmax(predictions_single[0]))
 plt.show()
