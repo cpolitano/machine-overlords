@@ -37,3 +37,22 @@ train_data = (train_data - mean) / std
 test_data = (test_data - mean) / std
 
 print(train_data[0])  # First training sample, normalized
+
+# Build Model
+def build_model():
+  model = keras.Sequential([
+    keras.layers.Dense(64, activation=tf.nn.relu,
+                       input_shape=(train_data.shape[1],)),
+    keras.layers.Dense(64, activation=tf.nn.relu),
+    keras.layers.Dense(1) # return 1 continuous output
+  ])
+
+  optimizer = tf.train.RMSPropOptimizer(0.001)
+
+  model.compile(loss='mse',
+                optimizer=optimizer,
+                metrics=['mae'])
+  return model
+
+model = build_model()
+model.summary()
