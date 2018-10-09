@@ -56,3 +56,17 @@ def build_model():
 
 model = build_model()
 model.summary()
+
+# Train Model
+# Display training progress by printing a single dot for each completed epoch
+class PrintDot(keras.callbacks.Callback):
+  def on_epoch_end(self, epoch, logs):
+    if epoch % 100 == 0: print('')
+    print('.', end='')
+
+EPOCHS = 500
+
+# Store training stats
+history = model.fit(train_data, train_labels, epochs=EPOCHS,
+                    validation_split=0.2, verbose=0,
+                    callbacks=[PrintDot()])
