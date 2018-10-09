@@ -50,9 +50,9 @@ def build_model():
 
   optimizer = tf.train.RMSPropOptimizer(0.001)
 
-  model.compile(loss='mse',
+  model.compile(loss='mse', # mean squared error
                 optimizer=optimizer,
-                metrics=['mae'])
+                metrics=['mae']) # mean absolute error
   return model
 
 model = build_model()
@@ -90,3 +90,24 @@ def plot_history(history):
   plt.show()
 
 plot_history(history)
+
+# how does model perform on test data?
+[loss, mae] = model.evaluate(test_data, test_labels, verbose=0)
+print("Testing set Mean Abs Error: ${:7.2f}".format(mae * 1000))
+
+test_predictions = model.predict(test_data).flatten()
+
+plt.scatter(test_labels, test_predictions)
+plt.xlabel('True Values [1000$]')
+plt.ylabel('Predictions [1000$]')
+plt.axis('equal')
+plt.xlim(plt.xlim())
+plt.ylim(plt.ylim())
+_ = plt.plot([-100, 100], [-100, 100])
+plt.show()
+
+error = test_predictions - test_labels
+plt.hist(error, bins = 50)
+plt.xlabel("Prediction Error [1000$]")
+_ = plt.ylabel("Count")
+plt.show()
