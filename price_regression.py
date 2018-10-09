@@ -5,6 +5,7 @@ from tensorflow import keras
 
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 print(tf.__version__)
 
@@ -66,7 +67,26 @@ class PrintDot(keras.callbacks.Callback):
 
 EPOCHS = 500
 
+# callback function to test if model is still improving and stop training if not
+# The patience parameter is the amount of epochs to check for improvement
+early_stop = keras.callbacks.EarlyStopping(monitor='val_loss', patience=20)
+
 # Store training stats
 history = model.fit(train_data, train_labels, epochs=EPOCHS,
                     validation_split=0.2, verbose=0,
-                    callbacks=[PrintDot()])
+                    callbacks=[early_stop, PrintDot()])
+
+# Plot training model progress
+def plot_history(history):
+  plt.figure()
+  plt.xlabel('Epoch')
+  plt.ylabel('Mean Abs Error [1000$]')
+  plt.plot(history.epoch, np.array(history.history['mean_absolute_error']),
+           label='Train Loss')
+  plt.plot(history.epoch, np.array(history.history['val_mean_absolute_error']),
+           label = 'Val loss')
+  plt.legend()
+  plt.ylim([0, 5])
+  plt.show()
+
+plot_history(history)
